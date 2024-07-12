@@ -1,0 +1,12 @@
+name: LiteCoin
+version: '${project.version}'
+main: me.stephenminer.litecoin.LiteCoin
+commands:
+  pay:
+    permission: litecoin.commands.pay
+  givecoin:
+    permission: litecoin.commands.give
+  bal:
+    permission: litecoin.commands.bal
+    aliases:
+      - balance
