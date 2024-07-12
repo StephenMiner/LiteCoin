@@ -10,3 +10,5 @@ commands:
     permission: litecoin.commands.bal
     aliases:
       - balance
+  setbal:
+    permission: litecoin.commands.setbal
