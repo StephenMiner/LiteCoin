@@ -160,7 +160,7 @@ public final class LiteCoin extends JavaPlugin {
 
     /**
      *
-     * @return HashMap of player names from UUIDS in the balances HashMap
+     * @return HashMap of player names from UUIDS in the balances HashMap. Player names are lower cased
      */
     public HashMap<String, UUID> namesOnFile(){
         HashMap<String, UUID> namesOnFile = new HashMap<>();
