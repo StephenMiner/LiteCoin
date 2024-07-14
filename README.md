@@ -27,3 +27,11 @@ Gives the target player the amount of LiteCoins specified, manifesting them from
 permission: litecoin.commands.setbal
 
 Sets the balance of the target player to the specified amount
+
+/gamble [amount]
+
+/gamble all
+
+Gambles the amount specified, if you win you will gain the amount you already had back and an additional amount equal to what you bet. if you lose, you lose the amount bet.
+
+permission: litecoin.commands.gamble
