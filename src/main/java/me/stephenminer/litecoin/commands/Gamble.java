@@ -1,6 +1,7 @@
 package me.stephenminer.litecoin.commands;
 
 import me.stephenminer.litecoin.LiteCoin;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -62,10 +63,14 @@ public class Gamble implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "You don't have enough LiteCoin to make this bet!");
                 return false;
             }
-
+            boolean betAll = bet == bal;
             if (gamble(player, bet)){
-                player.sendMessage(ChatColor.GOLD + "You have won the gammble!");
-            }else player.sendMessage(ChatColor.GOLD + "You may have lost, but who knows, you might win next time!");
+                player.sendMessage(ChatColor.GOLD + "You have won the gamble!");
+            }else {
+                player.sendMessage(ChatColor.GOLD + "You may have lost, but who knows, you might win next time!");
+                if (betAll)
+                    Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + player.getName() + " has gambled away all their LiteCoin and now have 0! So sad!");
+            }
             long cdMillis = (long) (readCooldown() * 60 * 1000);
             cooldown.put(player.getUniqueId(), System.currentTimeMillis() + cdMillis);
             return true;
