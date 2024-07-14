@@ -1,7 +1,9 @@
 package me.stephenminer.litecoin.commands;
 
 import me.stephenminer.litecoin.LiteCoin;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -42,12 +44,14 @@ public class BalTopCmd implements CommandExecutor {
         try {
             //get a sorted list of uuids based on their balances
             List<UUID> uuids = plugin.balances.keySet().stream()
-                    .sorted(Comparator.comparingInt(uuid -> plugin.balances.get(uuid)))
+                    .sorted((u1, u2) -> plugin.getBalance(u2) - plugin.getBalance(u1))
                     .collect(Collectors.toList());
             //display top 3
             int bound = Math.min(uuids.size(),3);
             for (int i = 0; i < bound; i++){
-                sender.sendMessage((i+1) + ". " + sender.getName());
+                UUID uuid = uuids.get(i);
+                String name = plugin.nameFromUUID(uuid);
+                sender.sendMessage((i+1) + ". " + name + ": " + plugin.getBalance(uuid) + " Lite Coins");
             }
         }catch (Exception ignored){}
     }
