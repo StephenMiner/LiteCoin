@@ -1,9 +1,6 @@
 package me.stephenminer.litecoin;
 
-import me.stephenminer.litecoin.commands.BalCmd;
-import me.stephenminer.litecoin.commands.GiveCoinCmd;
-import me.stephenminer.litecoin.commands.PayCmd;
-import me.stephenminer.litecoin.commands.SetBalCmd;
+import me.stephenminer.litecoin.commands.*;
 import me.stephenminer.litecoin.listeners.JoinListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -17,11 +14,13 @@ import java.util.*;
 
 public final class LiteCoin extends JavaPlugin {
     public ConfigFile playerFile;
+    public ConfigFile settings;
     public HashMap<UUID, Integer> balances;
 
     @Override
     public void onEnable() {
         playerFile = new ConfigFile(this,"players");
+        this.settings = new ConfigFile(this, "settings");
         balances = new HashMap<>();
         loadBalances();
         addCommands();
@@ -38,6 +37,7 @@ public final class LiteCoin extends JavaPlugin {
         getCommand("givecoin").setExecutor(new GiveCoinCmd());
         getCommand("bal").setExecutor(new BalCmd());
         getCommand("setbal").setExecutor(new SetBalCmd());
+        getCommand("gamble").setExecutor(new Gamble());
     }
 
     private void registerEvents(){

@@ -12,3 +12,5 @@ commands:
       - balance
   setbal:
     permission: litecoin.commands.setbal
+  gamble:
+    permission: litecoin.commands.gamble

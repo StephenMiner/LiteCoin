@@ -8,13 +8,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.HashMap;
 import java.util.Random;
+import java.util.UUID;
 
 public class Gamble implements CommandExecutor {
     private final LiteCoin plugin;
 
+    private HashMap<UUID, Long> cooldown;
+
     public Gamble(){
         this.plugin = JavaPlugin.getPlugin(LiteCoin.class);
+        cooldown = new HashMap<>();
     }
 
 
@@ -30,6 +35,14 @@ public class Gamble implements CommandExecutor {
         }
         if (sender instanceof Player){
             Player player = (Player) sender;
+            //cooldown check
+            long stored = cooldown.getOrDefault(player.getUniqueId(), 0L);
+            if (stored > System.currentTimeMillis()){
+                double timeLeft = (stored - System.currentTimeMillis()) / 1000d / 60d;
+                player.sendMessage(ChatColor.RED + "Command on cooldown!");
+                player.sendMessage(ChatColor.RED + "" + timeLeft + " minutes until you can cast this command again!");
+                return false;
+            }
             int bal = plugin.getBalance(player);
             int bet;
             //Defining bet
@@ -52,17 +65,21 @@ public class Gamble implements CommandExecutor {
             if (gamble(player, bet)){
                 player.sendMessage(ChatColor.GOLD + "You have won the gammble!");
             }else player.sendMessage(ChatColor.GOLD + "You may have lost, but who knows, you might win next time!");
+            long cdMillis = (long) (readCooldown() * 60 * 1000);
+            cooldown.put(player.getUniqueId(), System.currentTimeMillis() + cdMillis);
             return true;
         }else sender.sendMessage(ChatColor.RED + "Only players can use this command!");
         return false;
     }
 
 
+
     private boolean gamble(Player player, int wager){
         Random random = new Random();
         int roll = random.nextInt(100);
+        int chance = (int) (readChance() * 100);
         //Bet is won
-        if (roll < 50) {
+        if (roll < chance) {
             plugin.incrementBalance(player,wager);
             return true;
         }else{
@@ -71,4 +88,29 @@ public class Gamble implements CommandExecutor {
             return false;
         }
     }
+
+    /**
+     * Gets the chance to win a gamble from file
+     * @return chance to win a gamble as a double
+     */
+    private double readChance(){
+        String path = "gamble.chance";
+        if (plugin.settings.getConfig().contains(path))
+            return plugin.settings.getConfig().getDouble(path);
+        else return 0.5;
+    }
+
+    /**
+     * Gets the cooldown for gamble cmd from settings.yml file
+     * @return cooldown for gamble cmd in minutes
+     */
+    private double readCooldown(){
+        String path = "gamble.cooldown";
+        if (plugin.settings.getConfig().contains(path))
+            return plugin.settings.getConfig().getDouble(path);
+        else return 10;
+    }
+
+
+
 }
