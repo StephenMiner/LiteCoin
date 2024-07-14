@@ -24,7 +24,7 @@ public class BalTopCmd implements CommandExecutor {
 
     @Override
     public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args){
-        if (sender.hasPermission("litecoin.commands.baltop")){
+        if (!sender.hasPermission("litecoin.commands.baltop")){
             sender.sendMessage(ChatColor.RED + "No permission to use this command!");
             return false;
         }
