@@ -39,8 +39,9 @@ public class Gamble implements CommandExecutor {
             long stored = cooldown.getOrDefault(player.getUniqueId(), 0L);
             if (stored > System.currentTimeMillis()){
                 double timeLeft = (stored - System.currentTimeMillis()) / 1000d / 60d;
+
                 player.sendMessage(ChatColor.RED + "Command on cooldown!");
-                player.sendMessage(ChatColor.RED + "" + timeLeft + " minutes until you can cast this command again!");
+                player.sendMessage(ChatColor.RED + "" + trimDouble(timeLeft) + " minutes until you can cast this command again!");
                 return false;
             }
             int bal = plugin.getBalance(player);
@@ -111,6 +112,15 @@ public class Gamble implements CommandExecutor {
         else return 10;
     }
 
+    /**
+     * Removes all decimal places after the 2nd
+     * @param d input
+     * @return double from d with only 2 decimal places
+     */
+    private double trimDouble(double d){
+        int convert = (int) (d * 100);
+        return convert / 100d;
+    }
 
 
 }
