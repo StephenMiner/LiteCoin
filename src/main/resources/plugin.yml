@@ -14,3 +14,5 @@ commands:
     permission: litecoin.commands.setbal
   gamble:
     permission: litecoin.commands.gamble
+  baltop:
+    permission: litecoin.commands.baltop

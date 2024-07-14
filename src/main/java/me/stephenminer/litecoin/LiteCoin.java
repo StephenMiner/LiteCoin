@@ -38,6 +38,7 @@ public final class LiteCoin extends JavaPlugin {
         getCommand("bal").setExecutor(new BalCmd());
         getCommand("setbal").setExecutor(new SetBalCmd());
         getCommand("gamble").setExecutor(new Gamble());
+        getCommand("baltop").setExecutor(new BalTopCmd());
     }
 
     private void registerEvents(){
