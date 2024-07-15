@@ -7,10 +7,8 @@ import me.stephenminer.litecoin.papi.RankPlaceholder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.scoreboard.Team;
 
 import java.util.*;
 
@@ -30,9 +28,6 @@ public final class LiteCoin extends JavaPlugin {
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
             boolean enabled = new CoinPlaceholder().register();
             this.getLogger().info("LiteCoin placeholder expansion enabled: " + enabled);
-            for (int i = 1; i < 11; i++){
-                new RankPlaceholder(i).register();
-            }
         }
     }
 
