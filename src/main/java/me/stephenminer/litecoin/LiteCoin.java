@@ -2,6 +2,7 @@ package me.stephenminer.litecoin;
 
 import me.stephenminer.litecoin.commands.*;
 import me.stephenminer.litecoin.listeners.JoinListener;
+import me.stephenminer.litecoin.papi.CoinPlaceholder;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -25,6 +26,10 @@ public final class LiteCoin extends JavaPlugin {
         loadBalances();
         addCommands();
         registerEvents();
+        if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
+            boolean enabled = new CoinPlaceholder().register();
+            this.getLogger().info("LiteCoin placeholder expansion enabled: " + enabled);
+        }
     }
 
     @Override

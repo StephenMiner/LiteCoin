@@ -1,6 +1,8 @@
 name: LiteCoin
 version: '${project.version}'
 main: me.stephenminer.litecoin.LiteCoin
+softdepend:
+  - PlaceholderAPI
 commands:
   pay:
     permission: litecoin.commands.pay
