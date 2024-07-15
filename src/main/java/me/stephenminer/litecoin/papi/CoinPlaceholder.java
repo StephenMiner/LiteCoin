@@ -50,8 +50,10 @@ public class CoinPlaceholder extends PlaceholderExpansion {
         List<UUID> uuids = plugin.balances.keySet().stream()
                 .sorted((u1, u2) -> plugin.getBalance(u2) - plugin.getBalance(u1))
                 .collect(Collectors.toList());
-        if (uuids.size() > index-1)
-            return plugin.nameFromUUID(uuids.get(index-1));
+        if (uuids.size() > index-1) {
+            String name = plugin.nameFromUUID(uuids.get(index-1));
+            return name + ": " + plugin.getBalance(uuids.get(index-1));
+        }
         return "N/A";
     }
 }
