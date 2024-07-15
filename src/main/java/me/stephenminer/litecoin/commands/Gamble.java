@@ -69,7 +69,7 @@ public class Gamble implements CommandExecutor {
             }else {
                 player.sendMessage(ChatColor.GOLD + "You may have lost, but who knows, you might win next time!");
                 if (betAll)
-                    Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + player.getName() + " has gambled away all their LiteCoin and now have 0! So sad!");
+                    Bukkit.broadcastMessage(ChatColor.RED + "" + ChatColor.BOLD + player.getName() + " has gambled away all " + bet + " of their LiteCoins and now have 0! So sad!");
             }
             long cdMillis = (long) (readCooldown() * 60 * 1000);
             cooldown.put(player.getUniqueId(), System.currentTimeMillis() + cdMillis);
