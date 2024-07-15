@@ -33,11 +33,22 @@ public class RankPlaceholder extends PlaceholderExpansion {
         return plugin.nameFromUUID(uuids.get(index-1));
     }
 
+    public String getPlayerOfRank(int rank){
+        //get a sorted list of uuids based on their balances
+        List<UUID> uuids = plugin.balances.keySet().stream()
+                .sorted((u1, u2) -> plugin.getBalance(u2) - plugin.getBalance(u1))
+                .collect(Collectors.toList());
+        //get the amount of litecoin the player has
+        int balance = plugin.getBalance(uuids.get(rank-1));
+
+        return plugin.nameFromUUID(uuids.get(rank-1)) + ": " + balance + " litecoin";
+    }
+
 
 
     @Override
     public @NotNull String getIdentifier() {
-        return "litecoin_" + index;
+        return "litecoinlb";
     }
 
     @Override
@@ -53,6 +64,12 @@ public class RankPlaceholder extends PlaceholderExpansion {
 
     @Override
     public String onRequest(OfflinePlayer player, String params){
-        return ranking();
+        //if the parameter is an integer, return the player with that rank
+        try {
+            int rank = Integer.parseInt(params);
+            return getPlayerOfRank(rank);
+        } catch (NumberFormatException e){
+            return "Invalid rank";
+        }
     }
 }
