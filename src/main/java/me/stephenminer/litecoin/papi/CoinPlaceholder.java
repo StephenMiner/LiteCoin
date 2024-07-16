@@ -37,6 +37,7 @@ public class CoinPlaceholder extends PlaceholderExpansion {
             if (split.length >= 1) {
                 try {
                     UUID uuid = rankingUUID(Integer.parseInt(split[0]));
+                    if (uuid == null) return "N/A";
                     switch (split.length){
                         case 1:
                             return plugin.nameFromUUID(uuid);
