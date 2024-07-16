@@ -34,9 +34,15 @@ public class CoinPlaceholder extends PlaceholderExpansion {
     public String onRequest(OfflinePlayer player, String params){
         if (!params.isEmpty()) {
             String[] split = params.split("_");
-            if (split.length == 1) {
+            if (split.length >= 1) {
                 try {
-                    return ranking(Integer.parseInt(split[0]));
+                    UUID uuid = rankingUUID(Integer.parseInt(split[0]));
+                    switch (split.length){
+                        case 1:
+                            return plugin.nameFromUUID(uuid);
+                        case 2:
+                            return "" + plugin.getBalance(uuid);
+                    }
                 }catch (Exception ignored){
                     return "integer not found";
                 }
@@ -52,8 +58,16 @@ public class CoinPlaceholder extends PlaceholderExpansion {
                 .collect(Collectors.toList());
         if (uuids.size() > index-1) {
             String name = plugin.nameFromUUID(uuids.get(index-1));
-            return name + ": " + plugin.getBalance(uuids.get(index-1));
+            return name;
         }
         return "N/A";
+    }
+
+    public UUID rankingUUID(int index){
+        List<UUID> uuids = plugin.balances.keySet().stream()
+                .sorted((u1, u2) -> plugin.getBalance(u2) - plugin.getBalance(u1))
+                .collect(Collectors.toList());
+        if (uuids.size() > index - 1) return uuids.get(index-1);
+        else return null;
     }
 }
