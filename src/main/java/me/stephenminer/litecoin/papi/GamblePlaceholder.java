@@ -45,12 +45,15 @@ public class GamblePlaceholder extends PlaceholderExpansion {
         Profile profile = plugin.profiles.getOrDefault(target, null);
         if (profile == null) return "Target Player Isn't Real";
         if (type.equalsIgnoreCase("wins")) return "" + profile.wins();
-        if (type.equalsIgnoreCase("loses")) return "" + (profile.totalGambles()-profile.wins());
+        if (type.equalsIgnoreCase("losses")) return "" + (profile.totalGambles()-profile.wins());
         if (type.equalsIgnoreCase("total")) return "" + profile.totalGambles();
         if (type.equalsIgnoreCase("profits")) return "" + profile.gambleProfit();
-        double winRate = trimDouble(profile.ratio()*100);
-        if (winRate >= 0) return "" + winRate;
-        else return "N/A";
+        if (type.equalsIgnoreCase("win-rate")) {
+            double winRate = trimDouble(profile.ratio() * 100);
+            if (winRate >= 0) return "" + winRate;
+            else return "N/A";
+        }
+        return "Bad Arguments";
     }
 
     /**
