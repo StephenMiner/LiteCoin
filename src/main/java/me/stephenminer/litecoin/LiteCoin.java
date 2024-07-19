@@ -66,6 +66,7 @@ public final class LiteCoin extends JavaPlugin {
             int bal = this.playerFile.getConfig().getInt("players." + sUUID);
             this.playerFile.getConfig().set(path, bal);
         }
+        this.playerFile.getConfig().set("players",null);
         this.playerFile.saveConfig();
     }
     /**
