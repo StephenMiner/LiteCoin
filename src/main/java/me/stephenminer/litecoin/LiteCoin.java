@@ -3,7 +3,9 @@ package me.stephenminer.litecoin;
 import me.stephenminer.litecoin.commands.*;
 import me.stephenminer.litecoin.listeners.JoinListener;
 import me.stephenminer.litecoin.papi.CoinPlaceholder;
+import me.stephenminer.litecoin.papi.GamblePlaceholder;
 import me.stephenminer.litecoin.papi.RankPlaceholder;
+import me.stephenminer.litecoin.util.Profile;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
@@ -16,17 +18,23 @@ public final class LiteCoin extends JavaPlugin {
     public ConfigFile playerFile;
     public ConfigFile settings;
     public HashMap<UUID, Integer> balances;
+    public HashMap<UUID, Profile> profiles;
 
     @Override
     public void onEnable() {
         playerFile = new ConfigFile(this,"players");
         this.settings = new ConfigFile(this, "settings");
         balances = new HashMap<>();
+        profiles = new HashMap<>();
+        portBalances();
         loadBalances();
+
+        loadProfiles();
         addCommands();
         registerEvents();
         if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null){
             boolean enabled = new CoinPlaceholder().register();
+            new GamblePlaceholder().register();
             this.getLogger().info("LiteCoin placeholder expansion enabled: " + enabled);
         }
     }
@@ -34,6 +42,7 @@ public final class LiteCoin extends JavaPlugin {
     @Override
     public void onDisable() {
         saveBals();
+        saveProfiles();
     }
 
     private void addCommands(){
@@ -49,6 +58,16 @@ public final class LiteCoin extends JavaPlugin {
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new JoinListener(),this);
     }
+    private void portBalances(){
+        if (!this.playerFile.getConfig().contains("players")) return;
+        Set<String> uuids = this.playerFile.getConfig().getConfigurationSection("players").getKeys(false);
+        for (String sUUID : uuids){
+            String path = "balances." + sUUID + ".bal";
+            int bal = this.playerFile.getConfig().getInt("players." + sUUID);
+            this.playerFile.getConfig().set(path, bal);
+        }
+        this.playerFile.saveConfig();
+    }
     /**
      * Saves player balances to players.yml
      * format -> UUID: [balance]
@@ -57,18 +76,36 @@ public final class LiteCoin extends JavaPlugin {
         Set<UUID> keys = balances.keySet();
         for (UUID uuid : keys){
             int bal = balances.get(uuid);
-            this.playerFile.getConfig().set("players." + uuid.toString(), bal);
+            this.playerFile.getConfig().set("balances." + uuid.toString() + ".bal", bal);
         }
         this.playerFile.saveConfig();
     }
 
     public void loadBalances(){
-        if (!this.playerFile.getConfig().contains("players"))return;
-        Set<String> uuids = this.playerFile.getConfig().getConfigurationSection("players").getKeys(false);
+        if (!this.playerFile.getConfig().contains("balances"))return;
+        Set<String> uuids = this.playerFile.getConfig().getConfigurationSection("balances").getKeys(false);
         for (String sUUID : uuids){
             UUID uuid = UUID.fromString(sUUID);
-            int bal = this.playerFile.getConfig().getInt("players." + sUUID);
+            int bal = this.playerFile.getConfig().getInt("balances." + sUUID + ".bal");
             this.balances.put(uuid, bal);
+        }
+    }
+
+    public void loadProfiles(){
+        if (!this.playerFile.getConfig().contains("balances")) return;
+        Set<String> uuids = this.playerFile.getConfig().getConfigurationSection("balances").getKeys(false);
+        for (String sUUID : uuids){
+            UUID uuid = UUID.fromString(sUUID);
+            String gambleData = this.playerFile.getConfig().getString("balances." + sUUID + ".gambles");
+            Profile profile = gambleData != null ? new Profile(uuid, gambleData) : new Profile(uuid, 0,0,0);
+            profiles.put(uuid, profile);
+        }
+    }
+    public void saveProfiles(){
+        for (Profile profile : profiles.values()){
+            String path = "balances." + profile.uuid().toString() + ".gambles";
+            this.playerFile.getConfig().set(path,profile.dataString());
+            this.playerFile.saveConfig();
         }
     }
 
