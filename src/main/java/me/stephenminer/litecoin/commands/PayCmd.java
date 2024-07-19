@@ -42,7 +42,14 @@ public class PayCmd implements CommandExecutor {
         }
         Player player = (Player) sender;
 
-        int toPay = Integer.parseInt(args[1]);
+        int toPay;
+        try{
+            toPay = Integer.parseInt(args[1]);
+        }catch (Exception e){
+            player.sendMessage(ChatColor.RED + "Argument needs to be a whole number!");
+            sender.sendMessage(ChatColor.YELLOW + "Correct usage: /pay [player-name] [amount-you-want-to-give]");
+            return false;
+        }
         if (toPay < 1){
             player.sendMessage(ChatColor.RED + "There is no reason to send 0 currency");
             return false;
