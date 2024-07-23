@@ -218,4 +218,9 @@ public final class LiteCoin extends JavaPlugin {
         return namesOnFile;
     }
 
+    public int minBlackJackBet(){
+        return this.settings.getConfig().getInt("blackjack.min-bet");
+    }
+
+
 }

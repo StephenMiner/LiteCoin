@@ -42,6 +42,7 @@ public class BlackJack {
         if (result == Result.WIN){
             ended = true;
             player.sendMessage(ChatColor.YELLOW + "" + ChatColor.BOLD + "What the sigma, you got a Blackjack!");
+            player.playSound(player.getLocation(),Sound.LEVEL_UP,2,1);
            // BlackJackCmd.activeGames.remove(player.getUniqueId());
           //  player.closeInventory();
         }

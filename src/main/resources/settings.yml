@@ -1,3 +1,5 @@
 gamble:
   chance: 0.5
   cooldown: 10
+blackjack:
+  min-bet: 100

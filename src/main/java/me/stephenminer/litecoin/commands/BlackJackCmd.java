@@ -53,6 +53,10 @@ public class BlackJackCmd implements CommandExecutor {
                 player.sendMessage(ChatColor.RED + "No reason to bet 0 litecoins! Waste of time!");
                 return false;
             }
+            if (wager < plugin.minBlackJackBet()){
+                player.sendMessage(ChatColor.RED + "You must bet more than " + plugin.minBlackJackBet() + " LiteCoins for this game");
+                return false;
+            }
             int balance = plugin.getBalance(player);
 
             if (balance < wager){
