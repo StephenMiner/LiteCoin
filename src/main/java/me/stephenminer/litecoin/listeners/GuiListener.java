@@ -73,6 +73,7 @@ public class GuiListener implements Listener {
         if (game == null) return;
         if (game.ended()){
             BlackJackCmd.activeGames.remove(player.getUniqueId());
+            gameTimeout.remove(player.getUniqueId());
             return;
         }
         if (gameTimeout.contains(player.getUniqueId())) return;
@@ -137,6 +138,7 @@ public class GuiListener implements Listener {
             @Override
             public void run(){
                 if (!gameTimeout.contains(uuid) || game==null || game.ended()){
+                    gameTimeout.remove(uuid);
                     this.cancel();
                     return;
                 }
@@ -148,6 +150,7 @@ public class GuiListener implements Listener {
                             game.payout(BlackJack.Result.LOSE,false);
                             BlackJackCmd.activeGames.remove(uuid);
                         }
+                        gameTimeout.remove(uuid);
                         Player p = Bukkit.getPlayer(uuid).getPlayer();
                         p.sendMessage(ChatColor.RED + "You lose your blackjack game by default for quitting for too long!");
                     }

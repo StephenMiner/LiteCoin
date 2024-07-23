@@ -132,7 +132,9 @@ public class GamblePlaceholder extends PlaceholderExpansion {
             default:
                 return null;
         }
-        if (sorted.size() < index-1) return sorted.get(index-1);
+        System.out.println(sorted.size());
+        System.out.println(index);
+        if (sorted.size() > index-1) return sorted.get(index-1);
         else return null;
     }
 
