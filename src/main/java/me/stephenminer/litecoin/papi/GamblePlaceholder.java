@@ -3,8 +3,10 @@ package me.stephenminer.litecoin.papi;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import me.stephenminer.litecoin.LiteCoin;
 import me.stephenminer.litecoin.util.Profile;
+import org.bukkit.Chunk;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scoreboard.DisplaySlot;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.UUID;

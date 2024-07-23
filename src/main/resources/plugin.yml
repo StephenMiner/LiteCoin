@@ -18,3 +18,4 @@ commands:
     permission: litecoin.commands.gamble
   baltop:
     permission: litecoin.commands.baltop
+  blackjack:

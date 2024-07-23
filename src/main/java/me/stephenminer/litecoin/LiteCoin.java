@@ -1,6 +1,7 @@
 package me.stephenminer.litecoin;
 
 import me.stephenminer.litecoin.commands.*;
+import me.stephenminer.litecoin.listeners.GuiListener;
 import me.stephenminer.litecoin.listeners.JoinListener;
 import me.stephenminer.litecoin.papi.CoinPlaceholder;
 import me.stephenminer.litecoin.papi.GamblePlaceholder;
@@ -52,11 +53,13 @@ public final class LiteCoin extends JavaPlugin {
         getCommand("setbal").setExecutor(new SetBalCmd());
         getCommand("gamble").setExecutor(new Gamble());
         getCommand("baltop").setExecutor(new BalTopCmd());
+        getCommand("blackjack").setExecutor(new BlackJackCmd());
     }
 
     private void registerEvents(){
         PluginManager pm = this.getServer().getPluginManager();
         pm.registerEvents(new JoinListener(),this);
+        pm.registerEvents(new GuiListener(),this);
     }
     private void portBalances(){
         if (!this.playerFile.getConfig().contains("players")) return;
