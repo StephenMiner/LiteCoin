@@ -50,6 +50,10 @@ public class Profile {
     public void setTotalGambles(int total){ this.total = total; }
     public void setGambleProfit(int profit){ this.gambleProfit = profit; }
 
+    public int losses(){
+        return total - wins;
+    }
+
 
     /**
      *  Gets data represntation of object to write to a file

@@ -2,6 +2,7 @@ package me.stephenminer.litecoin.games;
 
 import me.stephenminer.litecoin.LiteCoin;
 import me.stephenminer.litecoin.games.gui.BlackJackGui;
+import me.stephenminer.litecoin.util.Profile;
 import org.bukkit.ChatColor;
 import org.bukkit.Sound;
 import org.bukkit.entity.Player;
@@ -12,6 +13,7 @@ import java.util.*;
 public class BlackJack {
     private final LiteCoin plugin;
     private final Player player;
+    private Profile profile;
     private int wager;
     private final Random random;
 
@@ -27,14 +29,17 @@ public class BlackJack {
         this.wager = wager;
         playerCards = new ArrayList<>();
         dealerHand = new ArrayList<>();
+        profile = plugin.profiles.get(player.getUniqueId());
         random = new Random();
         initDeck();
         gui = new BlackJackGui(this);
         gui.showPlayer(player);
 
+
     }
 
     public void startGame(){
+        profile.setTotalGambles(profile.totalGambles() + 1);
         shuffleDeck(random.nextInt(9) + 9);
         dealDealer();
         Result result = dealPlayer();
@@ -179,9 +184,12 @@ public class BlackJack {
     public void payout(Result result, boolean natural){
         if (result == Result.BUST || result == Result.LOSE){
             plugin.incrementBalance(player,-1 * wager);
+            profile.setGambleProfit(profile.gambleProfit() - wager);
         }else if (result == Result.WIN){
             int payout = natural ? (int) (wager * 1.5) : wager;
             plugin.incrementBalance(player,payout);
+            profile.setGambleProfit(profile.gambleProfit() + payout);
+            profile.setWins(profile.wins() + 1);
         }
     }
 
