@@ -110,6 +110,7 @@ public class GuiListener implements Listener {
         Player player = event.getPlayer();
         UUID uuid = player.getUniqueId();
         if (!tellingWager.contains(uuid)) return;
+        event.setCancelled(true);
         String msg = event.getMessage();
         tellingWager.remove(uuid);
         int wager;
@@ -129,12 +130,17 @@ public class GuiListener implements Listener {
     }
 
     private void startTimeOut(UUID uuid){
+        BlackJack game = BlackJackCmd.activeGames.getOrDefault(uuid,null);
         new BukkitRunnable(){
             int max = 5*60*20;
             int count = 0;
             @Override
             public void run(){
-                if (count >= max || !gameTimeout.contains(uuid)){
+                if (!gameTimeout.contains(uuid) || game==null || game.ended()){
+                    this.cancel();
+                    return;
+                }
+                if (count >= max){
                     this.cancel();
                     if (Bukkit.getPlayer(uuid).isOnline()){
                         BlackJack game = BlackJackCmd.activeGames.getOrDefault(uuid,null);
@@ -149,7 +155,7 @@ public class GuiListener implements Listener {
                 count++;
             }
 
-        }.runTaskTimer(plugin, 1,1);
+        }.runTaskTimer(plugin, 0,1);
     }
 
     public void resultMessage(BlackJack.Result result, Player player){

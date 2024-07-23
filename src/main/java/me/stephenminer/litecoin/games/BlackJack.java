@@ -186,9 +186,11 @@ public class BlackJack {
 
     public void restart(){
         for (Card card : playerCards){
+            card.setFaceDown(false);
             randomInsert(card);
         }
         for (Card card : dealerHand){
+            card.setFaceDown(false);
             randomInsert(card);
         }
         playerCards.clear();
